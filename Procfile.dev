@@ -1,0 +1,2 @@
+web: flask webpack run watch
+api: flask run --port 5003

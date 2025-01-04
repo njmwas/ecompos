@@ -1,7 +1,7 @@
 from flask import Blueprint, request, session, redirect
 from flask_jwt_extended import create_access_token
-from models import User
-from helpers import js_appdata, handle_response
+from app.models import User
+from app.helpers import js_appdata, handle_response
 
 auth_pb = Blueprint(
     "auth_routes", 

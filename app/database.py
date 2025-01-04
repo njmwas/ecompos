@@ -17,7 +17,7 @@ class BASE(DeclarativeBase):
                 return mapped_column(String, default=lambda: str(uuid.uuid4()), primary_key=True)
             
 class TimestampMixin:
-    createdAt: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
-    updatedAt: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    createdAt: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
+    updatedAt: Mapped[datetime] = mapped_column(default=datetime.now(timezone.utc))
 
 db = SQLAlchemy(metadata=metadata, model_class=BASE, disable_autonaming=True)

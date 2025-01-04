@@ -1,4 +1,4 @@
-from database import db, TimestampMixin
+from app.database import db, TimestampMixin
 from sqlalchemy_serializer import SerializerMixin
 
 class Role(TimestampMixin, db.Model, SerializerMixin):

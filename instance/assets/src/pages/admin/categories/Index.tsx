@@ -8,13 +8,13 @@ function Categories() {
     const action: any = params[0] || "list";
 
     const columns: Column[] = [
-        // {
-        //     title: "Image",
-        //     name: "img_url",
-        //     attr: {
-        //         type: "file"
-        //     }
-        // },
+        {
+            title: "Image",
+            name: "img_url",
+            attr: {
+                type: "file"
+            }
+        },
         {
             title: "Name",
             name: "name",

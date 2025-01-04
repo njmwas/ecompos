@@ -1,8 +1,9 @@
-from flask import Blueprint, send_file, request, redirect, g
-from database import db
-import os, models, inflect
-from models import Model
-from helpers import js_appdata, handle_response, modal_name
+from flask import Blueprint, send_file, request, g
+from app.database import db
+from app.models import Model
+import os
+from app.models import Model
+from app.helpers import js_appdata, handle_response, file_upload_handler
 from sqlalchemy.exc import IntegrityError
 
 ssr_bp = Blueprint(
@@ -38,6 +39,10 @@ def ssr(path:str):
     if request.method == "POST" or request.method == "PATCH":
         model_data = request.get_json() if request.content_type == "application/json" else request.form.to_dict()
         print("Model data", model_data)
+        if len(request.files) > 0:
+            files = file_upload_handler()
+            for k, v in files.items():
+                model_data[k] =  ",".join(v)
         model:Model = g.model
         try:
             if "id" not in model_data:
@@ -54,10 +59,10 @@ def ssr(path:str):
             db.session.commit()
             return {"data":model_object.to_dict(), "message":message}, status_code
         except IntegrityError as e:
-            return {"error": "Invalid Fields"}, 403
+            return {"error": f"Invalid Fields {repr(e)}"}, 403
         except ValueError as e:
             return {"error": "Missing Fields"}, 403
-        except:
-            return {"error": "There is an issue on our side"}
+        except Exception as e:
+            return {"error": f"There is an issue on our side {repr(e)}"}, 500
     
     return data, 200

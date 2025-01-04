@@ -11,16 +11,29 @@ interface AddUpdateProps {
     columns: Column[],
     defaultFormData?: any,
     id?: string,
-    requestType?: "xhr" | "ssr"
+    requestType?: "xhr" | "ssr",
+    onSave?: () => void
 }
 
-function AddUpdate({ resourceTitle, resource, columns, defaultFormData, id, requestType = "ssr" }: AddUpdateProps) {
+function AddUpdate({
+    resourceTitle,
+    resource,
+    columns,
+    defaultFormData,
+    id,
+    requestType = "ssr",
+    onSave
+}: AddUpdateProps) {
 
     const location = useLocation();
     const { action = "add" } = useParams();
     const { data } = React.useContext(DataContext);
-    const [formData, setFormData] = React.useState(
-        data!.data || defaultFormData || columns.reduce((a, b) => ({ ...a, [b.name]: "" }), {}));
+    const dt = data!.data || defaultFormData;
+    const defaults = columns.reduce((a: any, b) => {
+        a[b.name] = dt ? dt[b.name] : "";
+        return a;
+    }, {});
+    const [formData, setFormData] = React.useState({ ...defaults, ...(dt && "id" in dt && { id: dt.id }) });
     const { error, message } = data || {}
     const [info, setInfo] = React.useState({ error, message })
 
@@ -32,14 +45,32 @@ function AddUpdate({ resourceTitle, resource, columns, defaultFormData, id, requ
     }
 
     function handleSubmit(evt: React.SyntheticEvent) {
-        const form = evt.target;
+        const form = evt.target as HTMLFormElement;
+        let fd = formData;
         if (requestType === "xhr") {
             evt.preventDefault();
             if (!id) {
-                create(`/${resource}`, formData)
+                const headers: any = {}
+                const fileFields = columns.filter(c => 'type' in c.attr && c.attr.type === 'file');
+                if (fileFields) {
+                    fd = new FormData(form);
+                    fileFields.forEach(fileField => {
+                        const files: FileList = form[fileField.name].files;
+                        for (let i = 0; i < files.length; i++) {
+                            fd.append('files', files[i], files[i].name)
+                        }
+                    });
+                    headers["X-Requested-With"] = true
+                }
+
+                create(`/${resource}`, fd, headers)
                     .then(({ data: { data, message, error } }) => {
-                        setFormData(data);
-                        setInfo({ error, message })
+                        setFormData(columns.reduce((a: any, b) => {
+                            a[b.name] = data[b.name];
+                            return a;
+                        }, { id: data.id }));
+                        setInfo({ error, message });
+                        onSave();
                     })
                     .catch(e => {
                         setInfo(JSON.parse(e.message))
@@ -67,7 +98,9 @@ function AddUpdate({ resourceTitle, resource, columns, defaultFormData, id, requ
                     className={`form-control w-full 
                     ${column.attr.className}`}
                     name={column.name}
-                    value={formData[column.name]}
+                    {...("type" in column.attr && column.attr.type !== "file" ? {
+                        value: formData[column.name]
+                    } : {})}
                     onChange={handleChange}
                     {...("type" in column.attr && column.attr.type === 'select' ? {
                         valuefield: column.valuefield,

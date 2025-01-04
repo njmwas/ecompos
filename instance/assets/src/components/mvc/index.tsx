@@ -15,7 +15,7 @@ interface MVCProps {
     columns: Column[],
     addEditTarget?: "parent" | "modal",
     header?: React.ReactNode,
-    resourceTitle:string
+    resourceTitle: string
 }
 
 function MVC({
@@ -35,17 +35,21 @@ function MVC({
     const navigate = useNavigate();
 
     React.useEffect(() => {
+        getResourceData();
+    }, []);
+
+    function getResourceData() {
         get(`/${resource}`).then(response => {
             setData(response.data[resource] || []);
         });
-    }, []);
+    }
 
-    function handleEdit(item:any){
+    function handleEdit(item: any) {
         setSelectedItem(item);
-        if(addEditTarget === 'modal'){
+        if (addEditTarget === 'modal') {
             setModalIsOpen(true);
         }
-        else{
+        else {
             navigate(`${location.pathname}/update`)
         }
     }
@@ -57,16 +61,20 @@ function MVC({
             {addEditTarget == "parent" && <a href={`${location.pathname}/add`} className="ms-auto btn btn-lg btn-primary">
                 <i className="bi bi-plus" /> {resourceTitle}</a>}
             {addEditTarget == "modal" && <>
-                <button className="ms-auto btn btn-lg btn-primary" onClick={()=>setModalIsOpen(!modalIsOpen)}>
+                <button className="ms-auto btn btn-lg btn-primary" onClick={() => setModalIsOpen(!modalIsOpen)}>
                     <i className="bi bi-plus" /> {resourceTitle}
                 </button>
-                {modalIsOpen && <Modal onClose={()=>setModalIsOpen(!modalIsOpen)}>
-                    <AddUpdate {...{ columns, resource, resourceTitle }} defaultFormData={selectedItem} requestType="xhr" />
+                {modalIsOpen && <Modal onClose={() => setModalIsOpen(!modalIsOpen)}>
+                    <AddUpdate {...{ columns, resource, resourceTitle }}
+                        defaultFormData={selectedItem}
+                        requestType="xhr"
+                        onSave={getResourceData} />
                 </Modal>}
             </>}
         </div>
         <List {...{ columns, data, handleEdit }} />
-    </> : <AddUpdate {...{ columns, resource, resourceTitle }} defaultFormData={selectedItem} />}</>);
+    </> : <AddUpdate {...{ columns, resource, resourceTitle }}
+        defaultFormData={selectedItem} />}</>);
 }
 
 export default MVC;

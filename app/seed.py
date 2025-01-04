@@ -1,6 +1,6 @@
-from app import app
-from models import User, Role
-from database import db
+import app
+from app.models import User, Role
+from app.database import db
 
 with app.app_context():
     

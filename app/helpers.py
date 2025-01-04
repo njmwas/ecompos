@@ -1,5 +1,9 @@
-import base64, json, models, inflect
+import base64, json, inflect
+from app import models, configs
+from os import path
+from random import random
 from flask import Response, request, make_response, render_template, g
+from werkzeug.utils import secure_filename
 
 ie = inflect.engine()
 
@@ -25,8 +29,9 @@ def handle_response(func):
         
         data, status = resp
         if not data: data= {}
-            
-        if request.content_type == "application/json":
+        
+        # request.headers.get("X-Requested-With")
+        if request.content_type == "application/json" or request.headers.get("X-Requested-With", False):
             return make_response({"data":{**data, **g.appData}}, status)
         else:
             return render_template("index.html", data={**data, **g.appData}, status=status)
@@ -44,3 +49,20 @@ def modal_name(func):
         return *args, *kargs
             
     return handler
+
+# Decorator for managing uploading of files
+def file_upload_handler():
+    upload_path = path.dirname(__file__).replace("app", configs["UPLOAD_FOLDER"])
+        
+    files_urls={}
+    for field in request.files:
+        files_urls[field] = []
+        for file in request.files.getlist(field):
+            filename = secure_filename(file.filename)
+            new_filename = f"{random()*100000000}_{filename}"
+            filepath = path.join(upload_path, new_filename)
+            file.save(filepath)
+            files_urls[field].append(new_filename)
+        
+    return files_urls
+

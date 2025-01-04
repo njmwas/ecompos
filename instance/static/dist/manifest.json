@@ -1,3 +1,5 @@
 {
-  "app.js": "/static/dist/js/app.d082d3d8ac340b426f12.js"
+  "app.js": "/static/dist/js/app.js",
+  "bootstrap-icons.woff?": "/static/dist/39795c0b4513de014cf8.woff?dd67030699838ea613ee6dbda90effa6",
+  "bootstrap-icons.woff2?": "/static/dist/b7bcc075b395c14ce8c2.woff2?dd67030699838ea613ee6dbda90effa6"
 }

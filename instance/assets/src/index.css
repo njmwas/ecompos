@@ -1,6 +1,49 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "bootstrap-icons";
+
+@layer components{
+  .btn{
+    @apply px-2 py-1 rounded
+  }
+
+  .btn-primary{
+    @apply bg-blue-900 text-white
+  }
+
+  .btn-lg{
+    @apply px-4 py-2
+  }
+
+  .btn-info{
+    @apply bg-sky-300
+  }
+
+  .form-control{
+    @apply rounded px-4 py-3 w-full my-2
+  }
+
+  .form-control-sm{
+    @apply rounded px-2 py-1 w-full my-2
+  }
+
+  .form-group{
+    @apply w-full
+  }
+
+  .form-group label{
+    @apply my-2 font-bold
+  }
+
+  .table th{
+    @apply table-auto border border-gray-200 p-3 bg-gray-100
+  }
+
+  .table td{
+    @apply table-auto border border-gray-200 p-3
+  }
+}
 
 html,
 body {

@@ -1,0 +1,10 @@
+{
+  "build": {
+    "assetsPath": "/home/njmwas/projects/flask-webpacked/instance/static/dist",
+    "assetsURL": "/static/dist/",
+    "context": "/home/njmwas/projects/flask-webpacked/instance/assets",
+    "debug": true,
+    "staticPath": "/home/njmwas/projects/flask-webpacked/instance/static",
+    "staticURL": "/static/"
+  }
+}

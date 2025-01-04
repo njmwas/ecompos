@@ -1,19 +1,15 @@
-from database import db
-from datetime import datetime, timezone
+from database import db, TimestampMixin
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from app import bcrypt
 
-class User(db.Model, SerializerMixin):
+class User(TimestampMixin, db.Model, SerializerMixin):
     __tablename__="users"
     
-    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     _pwd = db.Column(db.String, nullable=False)
     name = db.Column(db.String)
-    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"), nullable=False)
-    createdAt = db.Column(db.TIMESTAMP, default=datetime.now(timezone.utc))
-    updatedAt = db.Column(db.TIMESTAMP, default=datetime.now(timezone.utc))
+    role_id = db.Column(db.String, db.ForeignKey("roles.id"), nullable=False)
     
     role = db.relationship("Role", back_populates="users")
     

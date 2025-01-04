@@ -1,7 +1,7 @@
 from flask import Blueprint, request, session, redirect
 from flask_jwt_extended import create_access_token
 from models import User
-from helpers import js_appdata, response
+from helpers import js_appdata, handle_response
 
 auth_pb = Blueprint(
     "auth_routes", 
@@ -16,7 +16,7 @@ def datauri(data):
     return js_appdata(data)
 
 @auth_pb.route("/", methods=["GET", "POST"])
-@response
+@handle_response
 def signin():    
     if request.method == "POST":
         data = request.get_json() if request.content_type == "applicaiton/json" else request.form.to_dict()
@@ -34,6 +34,8 @@ def signin():
         
         if request.content_type == "application/json":
             return {access_token: access_token}, 200
-        return redirect("/")
+        
+        return_url = request.args.get("return") if "return" in request.args else "/"
+        return redirect(return_url)
     
     return None, 200

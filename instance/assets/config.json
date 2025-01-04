@@ -1,10 +1,10 @@
 {
   "build": {
-    "assetsPath": "/home/njmwas/projects/flask-webpacked/instance/static/dist",
+    "assetsPath": "/home/njmwas/projects/e-comm-pos/instance/static/dist",
     "assetsURL": "/static/dist/",
-    "context": "/home/njmwas/projects/flask-webpacked/instance/assets",
+    "context": "/home/njmwas/projects/e-comm-pos/instance/assets",
     "debug": true,
-    "staticPath": "/home/njmwas/projects/flask-webpacked/instance/static",
+    "staticPath": "/home/njmwas/projects/e-comm-pos/instance/static",
     "staticURL": "/static/"
   }
 }

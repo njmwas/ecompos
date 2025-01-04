@@ -44,7 +44,7 @@ module.exports = {
     },
     output: {
         path: config.build.assetsPath,
-        filename: 'js/[name].[chunkhash].js',
+        filename: 'js/[name].js',
         publicPath: config.build.assetsURL
     },
     plugins: [manifestGen],

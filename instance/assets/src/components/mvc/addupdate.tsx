@@ -95,8 +95,7 @@ function AddUpdate({
                 {column.label && <label htmlFor={column.attr.id}>{column.label}{column.attr.required && " *"}</label>}
                 {id || formData.id && <input type="hidden" name="id" defaultValue={id || formData.id} />}
                 <FormField {...column.attr}
-                    className={`form-control w-full 
-                    ${column.attr.className}`}
+                    className={`form-control w-full ${column.attr.className || ''}`}
                     name={column.name}
                     {...("type" in column.attr && column.attr.type !== "file" ? {
                         value: formData[column.name]

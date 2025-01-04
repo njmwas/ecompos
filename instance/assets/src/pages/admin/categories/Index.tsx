@@ -12,7 +12,8 @@ function Categories() {
             title: "Image",
             name: "img_url",
             attr: {
-                type: "file"
+                type: "file",
+                accept:"image/*"
             }
         },
         {

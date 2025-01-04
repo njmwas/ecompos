@@ -47,13 +47,13 @@ function FileField({ children, files, ...props }: FileFieldProps) {
             }));
         }
         Promise.all(fileReadPromises).then((imgSrcs: string[] | ArrayBuffer[]) => setSrc(imgSrcs[0]))
-    }, []);
+    }, [files]);
 
     return (<div className="form-control">
         {children}
         {src && <img src={src as string}
             className="w-full h-64"
-            style={{ objectFit: "cover" }} />}
+            style={{ objectFit: "contain" }} />}
     </div>);
 }
 
